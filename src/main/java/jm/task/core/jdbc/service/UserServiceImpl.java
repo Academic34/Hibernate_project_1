@@ -35,4 +35,10 @@ public class UserServiceImpl implements UserService {
     public void cleanUsersTable() {
         usersTable.cleanUsersTable();
     }
+
+    @Override
+    public void closeConnection() {
+        usersTable.closeConnection();
+    }
+
 }

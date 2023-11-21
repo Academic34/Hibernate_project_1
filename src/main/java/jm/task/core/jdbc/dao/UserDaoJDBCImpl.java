@@ -91,4 +91,9 @@ public class UserDaoJDBCImpl implements UserDao {
             System.out.println("Ошибка при удалении таблицы");
         }
     }
+
+    @Override
+    public void closeConnection() {
+        util.closeConnection();
+    }
 }

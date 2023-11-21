@@ -22,4 +22,12 @@ public class Util {
     public Connection getConnection() {
         return connection;
     }
+
+    public void closeConnection() {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
