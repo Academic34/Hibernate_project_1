@@ -9,21 +9,20 @@ public class Util {
     private static final String USER = "rott";
     private static final String PASSWORD = "rott";
 
-    private Connection connection;
+    private static Connection connection;
 
-    public Util () {
-        try{
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+    public static Connection getConnection() {
+        if (connection == null) {
+            try{
+                connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
-    }
-
-    public Connection getConnection() {
         return connection;
     }
 
-    public void closeConnection() {
+    public static void closeConnection() {
         try {
             connection.close();
         } catch (SQLException e) {
