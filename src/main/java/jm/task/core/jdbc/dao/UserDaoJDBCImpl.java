@@ -9,37 +9,37 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
 
-    private final Util util = new Util();
-    private String SQL;
-
     public UserDaoJDBCImpl() {
 
     }
 
+    @Override
     public void createUsersTable() {
-        try (Statement statement = util.getConnection().createStatement()) {
-            SQL = "CREATE TABLE IF NOT EXISTS Users (" +
+        try (Statement statement = Util.getConnection().createStatement()) {
+            String createUsersTable = "CREATE TABLE IF NOT EXISTS Users (" +
                     "id BIGINT PRIMARY KEY AUTO_INCREMENT, " +
                     "name VARCHAR(255), " +
                     "lastName VARCHAR(255), " +
                     "age TINYINT)";
-            statement.execute(SQL);
+            statement.execute(createUsersTable);
         } catch (SQLException e) {
             System.out.println("Ошибка при создании таблицы");
         }
     }
 
+    @Override
     public void dropUsersTable() {
-        SQL = "DROP TABLE IF EXISTS Users";
-        try (Statement statement = util.getConnection().createStatement()) {
-            statement.execute(SQL);
+        String dropUsersTable = "DROP TABLE IF EXISTS Users";
+        try (Statement statement = Util.getConnection().createStatement()) {
+            statement.execute(dropUsersTable);
         } catch (SQLException e) {
             System.out.println("Ошибка при удалении таблицы");
         }
     }
 
+    @Override
     public void saveUser(String name, String lastName, byte age) {
-        try (PreparedStatement preparedStatement = util.getConnection().prepareStatement(
+        try (PreparedStatement preparedStatement = Util.getConnection().prepareStatement(
                 "INSERT INTO users(name, lastName, age) VALUES (?, ?, ?)")) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
@@ -50,8 +50,9 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
+    @Override
     public void removeUserById(long id) {
-        try (PreparedStatement preparedStatement = util.getConnection().prepareStatement(
+        try (PreparedStatement preparedStatement = Util.getConnection().prepareStatement(
                 "DELETE FROM users WHERE id = ?")) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
@@ -60,14 +61,15 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
+    @Override
     public List<User> getAllUsers() {
 
         ResultSet resultSet;
         List<User> listUser = new ArrayList<>();
-        SQL = "SELECT * FROM users";
+        String getAllUsers = "SELECT * FROM users";
 
-        try (Statement statement = util.getConnection().createStatement()) {
-            resultSet = statement.executeQuery(SQL);
+        try (Statement statement = Util.getConnection().createStatement()) {
+            resultSet = statement.executeQuery(getAllUsers);
             while (resultSet.next()) {
                 User user = new User();
                 user.setId(resultSet.getLong("id"));
@@ -79,14 +81,14 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException e) {
             System.out.println("Ошибка при получении всех пользователей из БД");
         }
-
         return listUser;
     }
 
+    @Override
     public void cleanUsersTable() {
-        SQL = "DELETE FROM users";
-        try (Statement statement = util.getConnection().createStatement()) {
-            statement.execute(SQL);
+        String cleanUsersTable = "DELETE FROM users";
+        try (Statement statement = Util.getConnection().createStatement()) {
+            statement.execute(cleanUsersTable);
         } catch (SQLException e) {
             System.out.println("Ошибка при удалении таблицы");
         }
